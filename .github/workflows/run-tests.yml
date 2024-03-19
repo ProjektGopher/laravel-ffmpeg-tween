@@ -21,7 +21,7 @@ jobs:
             testbench: 9.*
             carbon: ^2.63
           - laravel: 10.*
-            testbench: 8.*
+            testbench: ^8.11
             carbon: ^2.63
         exclude:
           - laravel: 11.*
