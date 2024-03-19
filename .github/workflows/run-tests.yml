@@ -12,20 +12,26 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        php: [8.2, 8.1]
-        laravel: [10.*]
+        os: [macos-latest, ubuntu-latest, windows-latest]
+        php: [8.3, 8.2, 8.1]
+        laravel: [11.*, 10.*]
         stability: [prefer-lowest, prefer-stable]
         include:
+          - laravel: 11.*
+            canvas: 9.*
+            carbon: 2.*
           - laravel: 10.*
-            testbench: 8.*
-            carbon: ^2.63
+            canvas: ^8.11
+            carbon: 2.*
+        exclude:
+          - laravel: 11.*
+            php: 8.1
 
     name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.stability }} - ${{ matrix.os }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -41,7 +47,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/canvas:${{ matrix.canvas }}" "nesbot/carbon:${{ matrix.carbon }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
       - name: List Installed Dependencies
